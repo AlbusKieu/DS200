@@ -70,13 +70,13 @@ Dự án hỗ trợ phân tích thông tin chính trị một cách tự động
 ### 1. Cài đặt thư viện:
 
 ### 2. Chạy tuần tự các notebook sau:
-| Notebook                        | Chức năng                                            |
-| ------------------------------- | ---------------------------------------------------- |
-| `baochinhphu_crawler.ipynb`     | Crawl dữ liệu từ baochinhphu.vn                      |
-| `autolabel.ipynb`               | Gán nhãn tự động bằng rule-based và Gemini Flash 2.5 |
-| `token_tags.ipynb`              | Đánh nhãn BIO cho trigger, argument, event type      |
-| `json_to_csv.ipynb`             | Chuyển dữ liệu đã gán nhãn thành CSV                 |
-| `Pipeline_Joint_Learning.ipynb` | Huấn luyện mô hình pipeline và joint learning        |
+| Notebook                        | Chức năng                                                                       |
+| ------------------------------- | --------------------------------------------------------------------------------|
+| `baochinhphu_crawler.ipynb`     | Crawl dữ liệu từ baochinhphu.vn và gán nhãn tự động bằng phương pháp rule-based |
+| `autolabel.ipynb`               | Gán nhãn tự động bằng api của Gemini Flash 2.5 với những trường hợp còn lại     |
+| `token_tags.ipynb`              | Đánh nhãn BIO cho trigger, argument, event type                                 |
+| `json_to_csv.ipynb`             | Chuyển dữ liệu đã gán nhãn thành CSV                                            |
+| `Pipeline_Joint_Learning.ipynb` | Huấn luyện mô hình pipeline và joint learning                                   |
 
 ### 3. Inference thời gian thực (Streaming):
 - Sử dụng thư mục streaming/ để thiết lập pipeline Kafka.
