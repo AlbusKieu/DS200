@@ -1,84 +1,85 @@
-# Events Extraction from Vietnamese political-theme News
 
-## 📰 Giới thiệu
+# Events Extraction from Vietnamese Political News
 
-Dự án này tập trung vào việc trích xuất thông tin sự kiện chính trị từ các bài báo tiếng Việt, chủ yếu thu thập từ trang web [baochinhphu.vn](https://baochinhphu.vn). Mục tiêu chính là:
+## 📰 Introduction
 
-- Nhận diện sự kiện (Event Trigger Tagging)  
-- Xác định các thành phần liên quan (Argument Detection)  
-- Phân loại loại sự kiện (Event Type Classification)  
+This project focuses on extracting political event information from Vietnamese news articles, mainly collected from [baochinhphu.vn](https://baochinhphu.vn). The main objectives are:
 
-Dự án hỗ trợ phân tích thông tin chính trị một cách tự động và chính xác trong tiếng Việt.
+- Event Trigger Tagging  
+- Argument Detection  
+- Event Type Classification  
 
----
-
-## 🔄 Quy trình xử lý dữ liệu
-
-### 📥 Thu thập dữ liệu
-- Crawl bài báo từ các trang như **baochinhphu.vn** và **vnexpress.net**.
-- Chủ yếu sử dụng dữ liệu từ **baochinhphu.vn** vì tập trung vào nội dung chính trị.
-
-### ⚙️ Tiền xử lý & Gán nhãn
-- Tách câu, tách từ và gán nhãn cho từng token theo ba tiêu chí:
-  - **Trigger Tagging**: Nhận diện từ/cụm từ kích hoạt sự kiện.
-  - **Argument Detection**: Nhận diện các thành phần như chủ thể, địa điểm, thời gian,...
-  - **Event Type Classification**: Phân loại loại sự kiện.
+The project supports automatic and accurate analysis of political information in Vietnamese.
 
 ---
 
-## 🧠 Các hướng tiếp cận mô hình
+## 🔄 Data Processing Pipeline
+
+### 📥 Data Collection
+- Crawl articles from sources such as **baochinhphu.vn** and **vnexpress.net**.
+- Mainly use data from **baochinhphu.vn** due to its focus on political content.
+
+### ⚙️ Preprocessing & Labeling
+- Sentence and word segmentation, and labeling each token according to three criteria:
+  - **Trigger Tagging**: Identify words/phrases that trigger events.
+  - **Argument Detection**: Identify components such as subject, location, time, etc.
+  - **Event Type Classification**: Classify the type of event.
+
+---
+
+## 🧠 Model Approaches
 
 ### 1. 📍 Pipeline Approach
-- **Trigger Tagging**: Sử dụng mô hình XLM-RoBERTa để xác định trigger.
-- **Argument Detection**: Sử dụng tiếp XLM-RoBERTa dựa trên trigger đã có.
-- **Event Type Classification**: Phân loại loại sự kiện từ toàn bộ câu.
-- Mỗi bước là một mô hình riêng biệt, liên kết theo pipeline.
+- **Trigger Tagging**: Use XLM-RoBERTa model to identify triggers.
+- **Argument Detection**: Continue using XLM-RoBERTa based on identified triggers.
+- **Event Type Classification**: Classify event type from the entire sentence.
+- Each step is a separate model, linked in a pipeline.
 
 ### 2. 🔗 Joint Learning (OneIE-based)
-- Mô hình tích hợp huấn luyện đồng thời cả 3 tác vụ:
+- Integrated model that simultaneously trains all 3 tasks:
   - Trigger Tagging
   - Argument Detection
   - Event Type Classification
-- Sử dụng **XLM-RoBERTa** làm backbone.
-- Tận dụng thông tin giữa các tác vụ để tăng hiệu quả mô hình.
+- Uses **XLM-RoBERTa** as the backbone.
+- Leverages information between tasks to improve model performance.
 
 ---
 
-## 📁 Cấu trúc thư mục và file chính
+## 📁 Main Directory and File Structure
 
-| File / Folder                  | Mô tả |
-|-------------------------------|-------|
-| `baochinhphu_crawler.ipynb`   | Crawl dữ liệu từ baochinhphu.vn |
-| `autolabel.ipynb`             | Gán nhãn tự động bằng rule-based + Gemini Flash 2.5 |
-| `token_tags.ipynb`            | Gán nhãn BIO cho các tác vụ |
-| `json_to_csv.ipynb`           | Chuyển dữ liệu từ JSON sang CSV |
-| `Pipeline_Joint_Learning.ipynb` | Huấn luyện và đánh giá mô hình |
-| `results.csv`, `final_output.csv` | Dữ liệu đã gán nhãn (thủ công + tự động) |
-| `streaming/`                  | Streaming sử dụng Kafka và Spark |
-| `oneie_encoders/`             | Các encoder và mô hình huấn luyện |
+| File / Folder                  | Description |
+|-------------------------------|-------------|
+| `baochinhphu_crawler.ipynb`   | Crawl data from baochinhphu.vn |
+| `autolabel.ipynb`             | Automatic labeling using rule-based + Gemini Flash 2.5 |
+| `token_tags.ipynb`            | BIO labeling for tasks |
+| `json_to_csv.ipynb`           | Convert data from JSON to CSV |
+| `Pipeline_Joint_Learning.ipynb` | Train and evaluate models |
+| `results.csv`, `final_output.csv` | Labeled data (manual + automatic) |
+| `streaming/`                  | Streaming using Kafka and Spark |
+| `oneie_encoders/`             | Encoders and trained models |
 
 ---
 
-## 💻 Yêu cầu hệ thống
+## 💻 System Requirements
 
 - Python >= 3.7  
-- Các thư viện cần thiết:
+- Required libraries:
   ```bash
   pip install transformers datasets scikit-learn torch seqeval openai pandas kafka-python pyspark
 
-## 🚀 Hướng dẫn chạy thử
-### 1. Cài đặt thư viện:
+## 🚀 Quick Start Guide
+### 1. Install libraries:
 
-### 2. Chạy tuần tự các notebook sau:
-| Notebook                        | Chức năng                                                                       |
-| ------------------------------- | --------------------------------------------------------------------------------|
-| `baochinhphu_crawler.ipynb`     | Crawl dữ liệu từ baochinhphu.vn và gán nhãn tự động bằng phương pháp rule-based |
-| `autolabel.ipynb`               | Gán nhãn tự động bằng api của Gemini Flash 2.5 với những trường hợp còn lại     |
-| `token_tags.ipynb`              | Đánh nhãn BIO cho trigger, argument, event type                                 |
-| `json_to_csv.ipynb`             | Chuyển dữ liệu đã gán nhãn thành CSV                                            |
-| `Pipeline_Joint_Learning.ipynb` | Huấn luyện mô hình pipeline và joint learning                                   |
+### 2. Run the following notebooks in order:
+| Notebook                        | Function                                                                       |
+| ------------------------------- | ------------------------------------------------------------------------------|
+| `baochinhphu_crawler.ipynb`     | Crawl data from baochinhphu.vn and automatically label using rule-based method |
+| `autolabel.ipynb`               | Automatically label using Gemini Flash 2.5 API for remaining cases             |
+| `token_tags.ipynb`              | BIO labeling for trigger, argument, event type                                 |
+| `json_to_csv.ipynb`             | Convert labeled data to CSV                                                    |
+| `Pipeline_Joint_Learning.ipynb` | Train pipeline and joint learning models                                       |
 
-### 3. Inference thời gian thực (Streaming):
-- Sử dụng thư mục streaming/ để thiết lập pipeline Kafka.
-- Mô hình inference là OneIE-like tích hợp với Spark Structured Streaming.
-- Cấu hình mô hình huấn luyện và Kafka topic trong các file tương ứng.
+### 3. Real-time Inference (Streaming):
+- Use the streaming/ directory to set up the Kafka pipeline.
+- The inference model is OneIE-like integrated with Spark Structured Streaming.
+- Configure the trained model and Kafka topic in the corresponding files.
